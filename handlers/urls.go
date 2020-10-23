@@ -89,5 +89,17 @@ func AccessShortURL(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Printf("[ * ] url: %+v\n", url)
-	http.Redirect(w, r, url.OriginalURL, 303)
+	keys, ok :=  r.URL.Query()["response"]
+	if !ok || len(keys) < 1 {
+		http.Redirect(w, r, url.OriginalURL, 303)
+		return
+	}
+
+	key := keys[0]
+	if key == "json" {
+		response = structs.APIResponse{Content: url}
+		_ = json.NewEncoder(w).Encode(response)
+	} else {
+		http.Redirect(w, r, url.OriginalURL, 303)
+	}
 }

@@ -144,7 +144,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	safeUser["email"] = user.Email
 
 	response = structs.APIResponse{Content: safeUser, Errors: nil}
-	json.NewEncoder(w).Encode(response)
+	_ = json.NewEncoder(w).Encode(response)
 
 	// i think this is redundant but it gives me a good feeling at the end of the function :)
 	w.WriteHeader(http.StatusOK)
