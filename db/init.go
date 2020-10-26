@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"os"
+	"strconv"
 
 	_ "github.com/lib/pq"
 )
@@ -18,7 +20,11 @@ func Init() error {
 	log.Printf("[ ~ ] (db/init) connecting to db...\n")
 
 	// why???
-	foo, err := connectToDB("localhost", 5432, "postgres", "postgres")
+	host, portStr, user, password := os.Getenv("URLSHORTENER_DB_HOST"), os.Getenv("URLSHORTENER_DB_PORT"), os.Getenv("URLSHORTENER_DB_USER"), os.Getenv("URLSHORTENER_DB_PASSWORD")
+
+	port, _ := strconv.Atoi(portStr)
+
+	foo, err := connectToDB(host, port, user, password)
 	database = foo
 
 	if err != nil {
