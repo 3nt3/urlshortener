@@ -10,13 +10,18 @@ import (
 )
 
 func main() {
+	log.Println("-~- starting API v0.1 -~-")
 	r := mux.NewRouter()
 
-	db.Init()
+	err := db.Init()
+	if err != nil {
+		return
+	}
 
-	r.HandleFunc("/new-url/", handlers.CreateShortURL).Methods("POST")
-	r.HandleFunc("/{id}", handlers.AccessShortURL).Methods("POST")
-	r.HandleFunc("/user/register", handlers.RegisterUserHandler).Methods("POST")
+	r.HandleFunc("/url", handlers.CreateShortURL).Methods("POST", "OPTIONS")
+	r.HandleFunc("/url/{id}", handlers.AccessShortURL).Methods("GET")
+
+	r.HandleFunc("/user/register", handlers.RegisterUserHandler).Methods("POST", "OPTIONS")
 
 	log.Printf("[ ~ ] starting server on port 8080")
 	log.Panic(http.ListenAndServe(":8080", r))

@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  api:
+    image: urlshortener-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      - "URLSHORTENER_DB_HOST=postgres"
+      - "URLSHORTENER_DB_PORT=5432"
+      - "URLSHORTENER_DB_USER=postgres"
+      - "URLSHORTENER_DB_PASSWORD=postgres"
+    restart: always
+
+  postgres:
+    image: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
+
+volumes:
+  db-data:
