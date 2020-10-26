@@ -23,6 +23,8 @@ func main() {
 
 	r.HandleFunc("/user/register", handlers.RegisterUserHandler).Methods("POST", "OPTIONS")
 
+	r.HandleFunc("/metrics", handlers.MetricsHandler).Methods("GET")
+
 	log.Printf("[ ~ ] starting server on port 8080")
 	log.Panic(http.ListenAndServe(":8080", r))
 }
